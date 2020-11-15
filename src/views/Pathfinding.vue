@@ -11,7 +11,7 @@
     </ul>
     <div class="grid" v-on:mouseup="this.mouseDown = false;if(this.buttons[5].state) search();">
       <ul v-for="y in height">
-        <li v-for="x in width" v-on:mousedown="this.mouseDown = true; useToolHere((x-1), (y-1));" v-on:mouseenter="useToolHere((x-1), (y-1))" :class="['box', updateCell( grid[(y-1)*width+(x-1)].state )]">{{ cellValue(this.grid[(y-1)*width+(x-1)].g) }}</li>
+        <li v-for="x in width" v-on:mousedown="this.mouseDown = true; useToolHere((x-1), (y-1));" v-on:mouseenter="useToolHere((x-1), (y-1))" :class="['box', updateCell(hideDetail( grid[(y-1)*width+(x-1)].state ))]">{{ cellValue(this.grid[(y-1)*width+(x-1)].g) }}</li>
       </ul>
     </div>
   </div>
@@ -152,7 +152,17 @@ export default {
     },
     updateCell(value) {
       return this.ToolNames[value];
-    }, 
+    },
+    hideDetail(state) {
+      if(!this.buttons[0].state){
+        switch(state) {
+          case 4:
+          case 5:
+            return 0;
+        }
+      }
+      return state;
+    },
     async search() {
       if(this.start.x === -1 || this.start.y === -1 || this.end.x === -1 || this.end.y === -1) return;
       this.resetNodes();
@@ -195,7 +205,7 @@ export default {
                 this.grid[index].prev = cur;
                 if(this.grid[index].state !== 2){
                   this.grid[index].state = 4;
-                  if(this.Searching && this.buttons[4].state && this.steps++ >= this.scale){
+                  if(this.Searching && this.buttons[4].state && this.steps++ >= this.scale && this.buttons[0].state){
                     this.steps = 0;
                     this.scale += 0.5;
                     await sleep(0.0001);
