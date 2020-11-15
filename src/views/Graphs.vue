@@ -77,8 +77,8 @@ export default{
 			this.createPolygonGraphData();
 
 			if(this.simplifiedData.length < 2) return;
-			this.lastValue = Math.floor(this.simplifiedData[this.simplifiedData.length - 1]);
-			this.recentChange = this.lastValue - Math.floor(this.simplifiedData[this.simplifiedData.length - 2]);
+			this.lastValue = this.simplifiedData[this.simplifiedData.length - 1];
+			this.recentChange = this.lastValue - this.simplifiedData[this.simplifiedData.length - 2];
 		},
 		adjustedHeight(value) {
 			return (this.dataHeight - this.bottomGap) / this.maxValue * value;
@@ -155,8 +155,8 @@ export default{
 		this.chartData.sort(function(a, b){return a-b});
 		this.setSimplifiedData();
 		this.setMaxValue;
-		this.lastValue = Math.floor(this.simplifiedData[this.simplifiedData.length - 1]);
-		this.recentChange = this.lastValue - Math.floor(this.simplifiedData[this.simplifiedData.length - 2]);
+		this.lastValue =this.simplifiedData[this.simplifiedData.length - 1];
+		this.recentChange = this.lastValue -this.simplifiedData[this.simplifiedData.length - 2];
 		this.createPolygonGraphData();
 
 		// Debug Lines
