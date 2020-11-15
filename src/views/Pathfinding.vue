@@ -6,7 +6,7 @@
       </li>
   	</ul>
     <ul>
-      <li class="buttons"><button v-on:click="search();">Search</button></li>
+      <li class="buttons"><button v-on:click="search();">Search<div style="display: inline;" v-if="resultSize > 0">: {{resultSize}}</div></button></li>
       <li class="buttons"><button v-on:click="clearAll();">Clear All</button></li>
     </ul>
     <div class="grid" v-on:mouseup="this.mouseDown = false;if(this.buttons[5].state) search();">
