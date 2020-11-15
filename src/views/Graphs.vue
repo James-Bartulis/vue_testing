@@ -3,7 +3,10 @@
 		<!-- Titles -->
 		<text x="50%" y="10%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa" class="dimmer medium" :class="{'brighter' : isHovered}"> {{title}} </text>
 		<text x="50%" y="19%" dominant-baseline="middle" text-anchor="middle" fill="#375466" class="dimmer small" :class="{'brighter' : isHovered}"> {{location}} </text>
-		<text x="50%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa" class="dimmer large" :class="{'brighter' : isHovered}"> {{Math.floor(lastValue/1000)}}k ( +10.7k )</text>
+		<g class="dimmer large" :class="{'brighter' : isHovered}">
+			<text x="30%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa">{{formatNumbers(lastValue)}}</text>
+			<text x="70%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa">({{formatNumbers(recentChange, true)}})</text>
+		</g>
 
 		<!-- Bottom Titles -->
 		<text :x="dataWidth-3" :y="bottomGraph + 10" class="dimmer" :class="{'brighter' : isHovered}" fill="#60e4fa">Now</text>
@@ -12,7 +15,7 @@
 		<!-- Horizontal Lines -->
 		<g v-for="n in horizontalLines" :transform="`translate(10, ${bottomGraph})`" class="dimmer supersmall" :class="{'brighter' : isHovered}">
 			<line x1="0" :x2="graphWidth" :y1="-(n-1)*adjustedHeight(maxValue)/2" :y2="-(n-1)*adjustedHeight(maxValue)/2" stroke="#375466" stroke-width="1" stroke-linecap="butt"/>
-			<text :x="graphWidth + 5" :y="-(n-1)*adjustedHeight(maxValue)/2 + 5">{{ Math.floor(((n-1) * maxValue/2)/1000) }}k</text>
+			<text :x="graphWidth + 5" :y="-(n-1)*adjustedHeight(maxValue)/2 + 5">{{formatNumbers((n-1) * maxValue/2)}}</text>
 		</g>
 		<!-- Data: -->
 		<polygon :points="polygonGraphData" style="fill:#60e4fa; stroke:#60e4fa; stroke-width:1;" class="dimmer" :class="{'brighter' : isHovered}" :transform="`translate(10, ${bottomGraph})`" />
@@ -35,6 +38,7 @@ export default{
 			title: "Existing Cases",
 			location: "World",
 			lastValue: 0,
+			recentChange: 0,
 			startDate: "22 Jan",
 			chartData: [5,7,3,7,2,8,1,9,5,4,7,2,8,1,5,7,3,7,2,8,1,9,5,4,7,2,8,1,5,7,3,7,2,8,1,9,5,4,7,2,8,1,5,7,3,7,2,8,1,9,5,4,7,2,8,1],
 			maxValue: 1,
@@ -62,8 +66,9 @@ export default{
 	methods: {
 		randomize() {
 			this.chartData = [];
-			for(let i = 0; i < 203; i++){
-				this.chartData.push(1 + Math.floor(Math.random() * 500000));
+			let range = Math.floor(Math.random() * 5000000);
+			for(let i = 0; i < 406; i++){
+				this.chartData.push(1 + Math.floor(Math.random() * range));
 			}
 
 			this.chartData.sort(function(a, b){return a-b});
@@ -71,7 +76,9 @@ export default{
 			this.setMaxValue;
 			this.createPolygonGraphData();
 
+			if(this.simplifiedData.length < 2) return;
 			this.lastValue = Math.floor(this.simplifiedData[this.simplifiedData.length - 1]);
+			this.recentChange = this.lastValue - Math.floor(this.simplifiedData[this.simplifiedData.length - 2]);
 		},
 		adjustedHeight(value) {
 			return (this.dataHeight - this.bottomGap) / this.maxValue * value;
@@ -105,6 +112,28 @@ export default{
 		},
 		ToggleHover() {
 			this.isHovered = !this.isHovered;
+		},
+		formatNumbers(value, WSign = false) {
+			let rounded, negative = false;
+			if(value < 0){
+				value *= -1;
+				negative = true;
+			}
+			if(value > 1000000){
+				rounded = String((value/1000000).toFixed(1));
+				if(rounded[rounded.length-1] == '0') { rounded = rounded.slice(0, rounded.length-2); }
+				return (negative ? '-' : (WSign ? '+' : '')) + rounded + 'm';
+
+			}else if(value > 1000){
+				rounded = String((value/1000).toFixed(1));
+				if(rounded[rounded.length-1] == '0') { rounded = rounded.slice(0, rounded.length-2); }
+				return (negative ? '-' : (WSign ? '+' : '')) + rounded + 'k';
+
+			}else{
+				rounded = String((value).toFixed(1));
+				if(rounded[rounded.length-1] == '0') { rounded = rounded.slice(0, rounded.length-2); }
+				return (negative ? '-' : (WSign ? '+' : '')) + rounded;
+			}
 		}
 	},
 	computed: {
@@ -118,7 +147,7 @@ export default{
 	},
 	beforeMount() {
 		this.graphHeight = this.height * 0.45;
-		this.graphWidth = this.width * 0.8;
+		this.graphWidth = this.width * 0.77;
 		this.dataHeight = this.graphHeight * 0.8;
 		this.dataWidth = this.graphWidth * 0.85;
 		this.bottomGraph = this.height - this.bottomGap;
@@ -126,6 +155,8 @@ export default{
 		this.chartData.sort(function(a, b){return a-b});
 		this.setSimplifiedData();
 		this.setMaxValue;
+		this.lastValue = Math.floor(this.simplifiedData[this.simplifiedData.length - 1]);
+		this.recentChange = this.lastValue - Math.floor(this.simplifiedData[this.simplifiedData.length - 2]);
 		this.createPolygonGraphData();
 
 		// Debug Lines
