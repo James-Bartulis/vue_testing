@@ -11,6 +11,9 @@
 				@click.prevent="randomize(index)"
 			/>
 		</g>
+		<g>
+			
+		</g>
 </template>
 
 <script>
@@ -22,13 +25,6 @@ export default{
 	data() {
 		return {
 			dataInput: [],
-			title: "Existing Cases",
-			location: "World",
-			startDate: "22 Jan",
-			endDate: "Now",
-			chartData: [5,7,3,7,2,8,1,9,5,4,7,2,8,1,5,7,3,7,2,8,1,9,5,4,7,2,8,1,5,7,3,7,2,8,1,9,5,4,7,2,8,1,5,7,3,7,2,8,1,9,5,4,7,2,8,1],
-			width: 250,
-			height: 250,
 		}
 	},
 	methods: {
