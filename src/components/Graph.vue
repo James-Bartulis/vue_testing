@@ -4,7 +4,7 @@
     <text x="50%" y="10%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa" class="dimmer medium" :class="{'brighter' : isHovered}"> {{Title}} </text>
     <text x="50%" y="19%" dominant-baseline="middle" text-anchor="middle" fill="#375466" class="dimmer small" :class="{'brighter' : isHovered}"> {{Location}} </text>
     <g class="dimmer large" :class="{'brighter' : isHovered}">
-      <text x="30%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa">{{formatNumbers(lastValue)}}</text>
+      <text x="25%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa">{{formatNumbers(lastValue)}}</text>
       <text x="70%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#60e4fa">({{formatNumbers(recentChange, true)}})</text>
     </g>
 
@@ -196,10 +196,14 @@ export default {
     user-select: none;
     border: 3px solid #60e4fa;
     border-radius: 5px;
+    position: relative;
   }
   svg:hover {
-    border: 3px solid red;
+    margin: 0px;
+    padding: 6px;
+    border: 7px solid red;
     border-radius: 5px;
+    top: -10px;
   }
   .dimmer {
     stroke-opacity: 0.7;
