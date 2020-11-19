@@ -11,18 +11,25 @@
 				:Height="data['height']"
 				@click="randomize(index)"
 			/>
-			<div class="map">
-				
-			</div>
+			<div class="map"></div>
 		</div>
 		<div class="lower">
-			<div class="left"></div>
+			<div class="left">
+				<SelectedStat
+					Title="CORONA VIRUS (COVID-19)"
+				/>
+			</div>
 			<div class="mainContent">
 				<div class="sliderBar">
 					<div class="playButton">
 						<div class="playText">Play</div>
 					</div>
-					<div class="slide">-----</div>
+					<div class="slider">
+						<svg height="40" width="900">
+							<line x1="10" x2="920" y1="20" y2="20" stroke="#60e4fa" stroke-width="3px" stroke-linecap="butt" />
+							<circle cx="880" cy="20" r="18" stroke="#60e4fa" stroke-width="3" fill="black" />
+						</svg>
+					</div>
 					<div class="date">March 23</div>
 				</div>
 			</div>
@@ -33,6 +40,7 @@
 <script>
 // imports:
 import Graph from '../components/Graph.vue';
+import SelectedStat from '../components/SelectedStat.vue';
 
 export default{
 	name: 'Graphs',
@@ -50,7 +58,6 @@ export default{
 			}
 
 			this.dataInput[index]['chartData'].sort(function(a, b){return a-b});
-			console.log(this.dataInput);
 		}
 	},
 	beforeMount() {
@@ -122,6 +129,7 @@ export default{
 	},
 	components: {
 		Graph,
+		SelectedStat,
 	}
 }
 </script>
@@ -156,7 +164,7 @@ export default{
 	.mainContent {
 		height: 100%;
 		width: 100%;
-		border: 2px solid red;
+		/*border: 2px solid red;*/
 	}
 	.sliderBar {
 		display: flex;
@@ -179,10 +187,10 @@ export default{
 	}
 	.slide {
 		flex-grow: 1;
+		margin: 10px;
 	}
 	.date {
 		font-size: 2rem;
 		width: 200px;
-		font-weight: bold;
 	}
 </style>

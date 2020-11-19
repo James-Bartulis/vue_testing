@@ -151,7 +151,7 @@ export default {
     setMaxValue(){
       let max = this.simplifiedData[0];
       this.simplifiedData.forEach( value => {
-        max = value > max ? value : max;/// troublesome line, causing max recursion update loop or something
+        max = value > max ? value : max;
       });
       this.maxValue = max;
       return this.maxValue;
