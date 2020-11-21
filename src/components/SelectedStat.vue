@@ -18,7 +18,7 @@
         <!-- List -->
         <g v-for="(place, index) in Places" :transform="`translate(100, ${(index+1)*15})`" >
           <!-- Bar -->
-          <polygon :points="makeRankedBar(place.value)" stroke-linecap="butt" stroke="red" fill="red"/>
+          <polygon :points="makeRankedBar(place.value)" stroke-linecap="butt" fill="#de3539"/>
           <!-- Name -->
           <text fill="#60e4fa" x="10">{{index+1}}. {{place.name}}</text>
           <!-- Value -->
@@ -95,7 +95,8 @@ export default {
     border: 2px solid blue;
   }
   .leftContainer {
-    color:#60e4fa;
+    color: #60e4fa;
+    filter: brightness(0.8);
     background-color: #1A2032;
     padding: 10px;
     box-sizing: border-box;

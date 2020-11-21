@@ -25,13 +25,16 @@
 						<div class="playText">Play</div>
 					</div>
 					<div class="slider">
-						<svg height="40" width="900">
-							<line x1="10" x2="920" y1="20" y2="20" stroke="#60e4fa" stroke-width="3px" stroke-linecap="butt" />
-							<circle cx="880" cy="20" r="18" stroke="#60e4fa" stroke-width="3" fill="black" />
+						<svg id="sliderSVG" height="40" width="900" :onmousemove="getMouseX" :onmouseleave="DragFalse">
+							<line x1="30" x2="880" y1="20" y2="20" stroke="#60e4fa" stroke-width="3px" stroke-linecap="butt" />
+							<circle id="sliderCircle" cx="30" cy="20" r="18" stroke="#60e4fa" stroke-width="3" fill="black" :onmousedown="DragTrue" :onmouseup="DragFalse" />
 						</svg>
 					</div>
-					<div class="date">March 23</div>
+					<div class="date">
+						March 23
+					</div>
 				</div>
+				<p> {{sliderValue}} </p>
 			</div>
 		</div>
 	</div>
@@ -47,6 +50,8 @@ export default{
 	data() {
 		return {
 			dataInput: [],
+			drag: false,
+			sliderValue: 0,
 		}
 	},
 	methods: {
@@ -58,7 +63,25 @@ export default{
 			}
 
 			this.dataInput[index]['chartData'].sort(function(a, b){return a-b});
-		}
+		},
+		getMouseX(event) {
+			if(!this.drag) return;
+			var svg = document.getElementById('sliderSVG');
+			var pt = svg.createSVGPoint();
+	    pt.x = event.clientX;
+			var circle = document.getElementById('sliderCircle');
+	    let x = Math.floor(pt.matrixTransform(svg.getScreenCTM().inverse()).x);
+	    x = (x < 30) ? 30 : x;
+	    x = (x > 880) ? 880 : x;
+	    if(this.sliderValue != Math.floor((x-30)/20)) this.sliderValue = Math.floor((x-30)/20); // lessens range of sliderValue, helps lessen updates to sliderValue when dragged
+	    circle.setAttributeNS(null, "cx", x);
+		},
+		DragTrue(){
+			this.drag = true;
+		},
+		DragFalse(){
+			this.drag = false;
+		},
 	},
 	beforeMount() {
 		this.dataInput = [

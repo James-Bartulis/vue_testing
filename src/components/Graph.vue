@@ -201,7 +201,7 @@ export default {
   svg:hover {
     margin: 0px;
     padding: 6px;
-    border: 7px solid red;
+    border: 7px solid #de3539;
     border-radius: 5px;
     top: -10px;
   }
